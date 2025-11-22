@@ -4,7 +4,8 @@ import com.example.WebNovelReviewSite.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
