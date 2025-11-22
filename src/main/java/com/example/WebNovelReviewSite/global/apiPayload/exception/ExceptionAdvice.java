@@ -4,7 +4,6 @@ import com.example.WebNovelReviewSite.global.apiPayload.ApiResponse;
 import com.example.WebNovelReviewSite.global.apiPayload.code.BaseErrorCode;
 import com.example.WebNovelReviewSite.global.apiPayload.code.status.GeneralErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
-// jakarta 임포트
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +69,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                                                            HttpHeaders headers, HttpServletRequest request) {
 
         ApiResponse<Object> body = ApiResponse.onFailure(reason, reason.getMessage());
-//        e.printStackTrace();
 
         WebRequest webRequest = new ServletWebRequest(request);
         return super.handleExceptionInternal(

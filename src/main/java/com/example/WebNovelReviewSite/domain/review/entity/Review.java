@@ -1,8 +1,5 @@
 package com.example.WebNovelReviewSite.domain.review.entity;
 
-
-import com.example.WebNovelReviewSite.domain.hashtag.entity.Hashtag;
-import com.example.WebNovelReviewSite.domain.hashtag.entity.ReviewHashtag;
 import com.example.WebNovelReviewSite.domain.novel.entity.Novel;
 import com.example.WebNovelReviewSite.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -10,7 +7,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,10 +44,6 @@ public class Review {
     @Column(name = "views")
     private Long views;
 
-    //리뷰 - 해시태그
-    @OneToMany(mappedBy = "review")
-    private List<ReviewHashtag> reviewHashtags = new ArrayList<>();
-
     //좋아요
     @ManyToMany
     @JoinTable(name = "like",
@@ -58,5 +51,4 @@ public class Review {
                 inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> userList = new ArrayList<>();
-
 }

@@ -1,14 +1,16 @@
 package com.example.WebNovelReviewSite.domain.user.entity;
 
 import com.example.WebNovelReviewSite.domain.author.entity.AuthorInfo;
-import com.example.WebNovelReviewSite.domain.badge.entity.Badge;
 import com.example.WebNovelReviewSite.domain.novel.entity.Collection;
 import com.example.WebNovelReviewSite.domain.review.entity.Review;
 import com.example.WebNovelReviewSite.domain.user.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -39,10 +41,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name ="role")
     private Role role;
-
-    //user - user_badge
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserBadge> userBadges = new  ArrayList<>();
 
     //user - follow
     @OneToMany(mappedBy = "follower")

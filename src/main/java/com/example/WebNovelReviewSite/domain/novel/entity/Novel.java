@@ -1,14 +1,11 @@
 package com.example.WebNovelReviewSite.domain.novel.entity;
 
-import com.example.WebNovelReviewSite.domain.hashtag.entity.Hashtag;
-import com.example.WebNovelReviewSite.domain.hashtag.entity.NovelHashtag;
 import com.example.WebNovelReviewSite.domain.novel.enums.Genre;
 import com.example.WebNovelReviewSite.domain.novel.enums.NovelStatus;
 import com.example.WebNovelReviewSite.domain.novel.enums.RestrictedType;
 import com.example.WebNovelReviewSite.domain.review.entity.Review;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -55,19 +52,7 @@ public class Novel {
     @OneToMany(mappedBy = "novel",fetch = FetchType.LAZY)
     private List<CollectedNovel> collectedNovels = new ArrayList<>();
 
-    //novel - novel_hashtag
-    @OneToMany(mappedBy = "novel",fetch = FetchType.LAZY)
-    private List<NovelHashtag> novelHashtags = new ArrayList<>();
-
     //novel - review
     @OneToMany(mappedBy = "novel")
     private List<Review> reviews = new ArrayList<>();
-
-    //novel - novel_platform
-    @OneToMany(mappedBy = "novel")
-    private List<Platform> platforms = new ArrayList<>();
-
-    //novel - novel_image
-    @OneToMany(mappedBy = "novel")
-    private List<NovelImage> images = new ArrayList<>();
 }
