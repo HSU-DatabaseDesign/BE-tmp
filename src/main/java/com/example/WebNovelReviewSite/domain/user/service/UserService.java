@@ -29,10 +29,19 @@ public class UserService {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
 
-        User user = new User(null, request.getName(), request.getId(), request.getPasswd(),
-                request.getNickname(), request.getEmail(), Role.USER,
-                new ArrayList<>(), new HashSet<>(), new HashSet<>(), null, new ArrayList<>(), new ArrayList<>(),
-                new ArrayList<>());
+        User user = User.builder()
+                .name(request.getName())
+                .id(request.getId())
+                .passwd(request.getPasswd())
+                .nickname(request.getNickname())
+                .email(request.getEmail())
+                .role(Role.USER)
+                .followings(new HashSet<>())
+                .followers(new HashSet<>())
+                .collections(new ArrayList<>())
+                .reviews(new ArrayList<>())
+                .likeList(new ArrayList<>())
+                .build();
 
         User savedUser = userRepository.save(user);
         return savedUser.getUserId();

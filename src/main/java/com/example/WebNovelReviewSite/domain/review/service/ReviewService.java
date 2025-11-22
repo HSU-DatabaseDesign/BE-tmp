@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,14 @@ public class ReviewService {
         Novel novel = novelRepository.findById(request.getNovelId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 작품입니다."));
 
-        Review review = new Review(null, user, novel, request.getContent(), request.getStar(), 0L, null, null);
+        Review review = Review.builder()
+                .user(user)
+                .novel(novel)
+                .content(request.getContent())
+                .star(request.getStar())
+                .views(0L)
+                .userList(new ArrayList<>())
+                .build();
 
         Review savedReview = reviewRepository.save(review);
         return savedReview.getReviewId();

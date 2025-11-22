@@ -23,9 +23,16 @@ public class AuthorService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        AuthorInfo authorInfo = new AuthorInfo(user.getUserId(), user, request.getPenName(),
-                request.getNationality(), request.getDebutYear(), request.getBrief(),
-                request.getProfileImage(), false);
+        AuthorInfo authorInfo = AuthorInfo.builder()
+                .userId(user.getUserId())
+                .user(user)
+                .penName(request.getPenName())
+                .nationality(request.getNationality())
+                .debutYear(request.getDebutYear())
+                .brief(request.getBrief())
+                .profileImage(request.getProfileImage())
+                .isConfirmed(false)
+                .build();
 
         AuthorInfo saved = authorRepository.save(authorInfo);
         return saved.getUserId();
