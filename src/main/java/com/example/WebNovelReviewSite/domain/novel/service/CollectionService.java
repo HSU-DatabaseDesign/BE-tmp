@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +34,12 @@ public class CollectionService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        Collection collection = new Collection(null, user, request.getCollectionName(),
-                request.getContent(), null);
+        Collection collection = Collection.builder()
+                .user(user)
+                .collectionName(request.getCollectionName())
+                .content(request.getContent())
+                .collectedNovels(new ArrayList<>())
+                .build();
 
         Collection saved = collectionRepository.save(collection);
         return saved.getCollectionId();
