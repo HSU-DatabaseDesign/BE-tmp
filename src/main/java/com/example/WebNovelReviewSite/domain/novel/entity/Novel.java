@@ -16,6 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 @Table(name = "novel")
 public class Novel {
 
@@ -53,6 +54,6 @@ public class Novel {
     private List<CollectedNovel> collectedNovels = new ArrayList<>();
 
     //novel - review
-    @OneToMany(mappedBy = "novel")
+    @OneToMany(mappedBy = "novel", fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
 }

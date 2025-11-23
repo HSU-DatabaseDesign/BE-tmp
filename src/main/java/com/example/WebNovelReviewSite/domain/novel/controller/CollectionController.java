@@ -5,6 +5,7 @@ import com.example.WebNovelReviewSite.domain.novel.dto.CollectionResponseDTO;
 import com.example.WebNovelReviewSite.domain.novel.service.CollectionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class CollectionController {
 
     @Operation(summary = "컬렉션 생성", description = "새로운 컬렉션을 생성합니다.")
     @PostMapping
-    public ResponseEntity<Long> createCollection(@RequestBody CollectionRequestDTO.CreateDto request) {
+    public ResponseEntity<Long> createCollection(@Valid @RequestBody CollectionRequestDTO.CreateDto request) {
         Long collectionId = collectionService.createCollection(request);
         return ResponseEntity.ok(collectionId);
     }
@@ -29,7 +30,7 @@ public class CollectionController {
     @Operation(summary = "컬렉션 수정", description = "컬렉션의 이름과 설명을 수정합니다.")
     @PutMapping("/{collectionId}")
     public ResponseEntity<Void> updateCollection(@PathVariable Long collectionId,
-            @RequestBody CollectionRequestDTO.UpdateDto request) {
+            @Valid @RequestBody CollectionRequestDTO.UpdateDto request) {
         collectionService.updateCollection(collectionId, request);
         return ResponseEntity.ok().build();
     }

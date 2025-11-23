@@ -22,7 +22,7 @@ public class UserService {
     @Transactional
     public Long signup(UserRequestDTO.SignupDto request) {
         // Check duplicates
-        if (userRepository.existsById(request.getId())) {
+        if (userRepository.existsByLoginId(request.getId())) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -48,7 +48,7 @@ public class UserService {
     }
 
     public Long login(UserRequestDTO.LoginDto request) {
-        User user = userRepository.findById(request.getId())
+        User user = userRepository.findByLoginId(request.getId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
         if (!user.getPasswd().equals(request.getPasswd())) {
