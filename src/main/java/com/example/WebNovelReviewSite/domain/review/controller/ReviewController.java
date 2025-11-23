@@ -5,6 +5,7 @@ import com.example.WebNovelReviewSite.domain.review.dto.ReviewResponseDTO;
 import com.example.WebNovelReviewSite.domain.review.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 작성", description = "웹소설에 대한 리뷰를 작성합니다. 작품당 1인 1개 리뷰 제한.")
     @PostMapping
-    public ResponseEntity<Long> createReview(@RequestBody ReviewRequestDTO.CreateDto request) {
+    public ResponseEntity<Long> createReview(@Valid @RequestBody ReviewRequestDTO.CreateDto request) {
         Long reviewId = reviewService.createReview(request);
         return ResponseEntity.ok(reviewId);
     }
@@ -29,7 +30,7 @@ public class ReviewController {
     @Operation(summary = "리뷰 수정", description = "본인이 작성한 리뷰를 수정합니다.")
     @PutMapping("/{reviewId}")
     public ResponseEntity<Void> updateReview(@PathVariable Long reviewId,
-            @RequestBody ReviewRequestDTO.UpdateDto request) {
+            @Valid @RequestBody ReviewRequestDTO.UpdateDto request) {
         reviewService.updateReview(reviewId, request);
         return ResponseEntity.ok().build();
     }

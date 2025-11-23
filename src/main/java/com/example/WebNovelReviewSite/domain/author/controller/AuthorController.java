@@ -5,6 +5,7 @@ import com.example.WebNovelReviewSite.domain.author.dto.AuthorResponseDTO;
 import com.example.WebNovelReviewSite.domain.author.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class AuthorController {
 
     @Operation(summary = "작가 프로필 등록", description = "작가 프로필을 등록합니다. 관리자 승인이 필요합니다.")
     @PostMapping
-    public ResponseEntity<Long> createAuthor(@RequestBody AuthorRequestDTO.CreateDto request) {
+    public ResponseEntity<Long> createAuthor(@Valid @RequestBody AuthorRequestDTO.CreateDto request) {
         Long userId = authorService.createAuthor(request);
         return ResponseEntity.ok(userId);
     }
@@ -27,7 +28,7 @@ public class AuthorController {
     @Operation(summary = "작가 프로필 수정", description = "작가 프로필 정보를 수정합니다.")
     @PutMapping("/{userId}")
     public ResponseEntity<Void> updateAuthor(@PathVariable Long userId,
-            @RequestBody AuthorRequestDTO.UpdateDto request) {
+            @Valid @RequestBody AuthorRequestDTO.UpdateDto request) {
         authorService.updateAuthor(userId, request);
         return ResponseEntity.ok().build();
     }
