@@ -45,6 +45,12 @@ public class Review {
     @Column(name = "views")
     private Long views;
 
+    //해시태그
+    @ElementCollection
+    @CollectionTable(name = "review_hashtag", joinColumns = @JoinColumn(name = "review_id"))
+    @Column(name = "hashtag")
+    private List<String> hashtags = new ArrayList<>();
+
     //좋아요
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "review_like",

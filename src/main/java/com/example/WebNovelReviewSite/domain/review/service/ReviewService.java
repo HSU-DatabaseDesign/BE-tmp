@@ -45,6 +45,7 @@ public class ReviewService {
                 .content(request.getContent())
                 .star(request.getStar())
                 .views(0L)
+                .hashtags(request.getHashtags() != null ? request.getHashtags() : new ArrayList<>())
                 .userList(new ArrayList<>())
                 .build();
 
@@ -84,6 +85,7 @@ public class ReviewService {
                         .star(review.getStar())
                         .views(review.getViews())
                         .likeCount((long) review.getUserList().size())
+                        .hashtags(review.getHashtags())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -102,6 +104,7 @@ public class ReviewService {
                 .star(review.getStar())
                 .views(review.getViews())
                 .likeCount((long) review.getUserList().size())
+                .hashtags(review.getHashtags())
                 .build();
     }
 
