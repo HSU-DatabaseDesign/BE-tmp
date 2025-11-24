@@ -27,7 +27,7 @@ public class ReviewService {
     private final NovelRepository novelRepository;
 
     @Transactional
-    public Long createReview(ReviewRequestDTO.CreateDto request) {
+    public Long createReview(ReviewRequestDTO.ReviewCreateDto request) {
         // Check duplicate review
         if (reviewRepository.existsByUser_UserIdAndNovel_NovelId(request.getUserId(), request.getNovelId())) {
             throw new IllegalArgumentException("이미 해당 작품에 리뷰를 작성했습니다.");
@@ -53,7 +53,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void updateReview(Long reviewId, ReviewRequestDTO.UpdateDto request) {
+    public void updateReview(Long reviewId, ReviewRequestDTO.ReviewUpdateDto request) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
 

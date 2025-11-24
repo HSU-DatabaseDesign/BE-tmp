@@ -13,7 +13,7 @@ public class AuthorRequestDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateDto {
+    public static class AuthorCreateDto {
         @NotNull(message = "사용자 ID는 필수입니다")
         private Long userId;
 
@@ -38,7 +38,7 @@ public class AuthorRequestDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateDto {
+    public static class AuthorUpdateDto {
         @Size(max = 50, message = "필명은 50자 이하여야 합니다")
         private String penName;
 

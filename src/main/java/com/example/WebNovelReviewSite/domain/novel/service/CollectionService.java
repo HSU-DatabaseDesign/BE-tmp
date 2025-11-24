@@ -30,7 +30,7 @@ public class CollectionService {
     private final CollectedNovelRepository collectedNovelRepository;
 
     @Transactional
-    public Long createCollection(CollectionRequestDTO.CreateDto request) {
+    public Long createCollection(CollectionRequestDTO.CollectionCreateDto request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
@@ -46,7 +46,7 @@ public class CollectionService {
     }
 
     @Transactional
-    public void updateCollection(Long collectionId, CollectionRequestDTO.UpdateDto request) {
+    public void updateCollection(Long collectionId, CollectionRequestDTO.CollectionUpdateDto request) {
         Collection collection = collectionRepository.findById(collectionId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컬렉션입니다."));
 

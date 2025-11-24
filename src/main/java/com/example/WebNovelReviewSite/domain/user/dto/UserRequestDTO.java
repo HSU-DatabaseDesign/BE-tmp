@@ -12,7 +12,7 @@ public class UserRequestDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SignupDto {
+    public static class UserSignupDto {
         @NotBlank(message = "이름은 필수입니다")
         @Size(max = 20, message = "이름은 20자 이하여야 합니다")
         private String name;
@@ -38,7 +38,7 @@ public class UserRequestDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class LoginDto {
+    public static class UserLoginDto {
         @NotBlank(message = "아이디는 필수입니다")
         private String id;
 
@@ -49,7 +49,7 @@ public class UserRequestDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateDto {
+    public static class UserUpdateDto {
         @Size(max = 20, message = "이름은 20자 이하여야 합니다")
         private String name;
 
