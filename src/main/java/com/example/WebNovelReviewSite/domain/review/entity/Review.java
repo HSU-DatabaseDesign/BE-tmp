@@ -47,7 +47,7 @@ public class Review {
 
     //좋아요
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "like",
+    @JoinTable(name = "review_like",
                 joinColumns = @JoinColumn(name = "review_id"),
                 inverseJoinColumns = @JoinColumn(name = "user_id")
     )
