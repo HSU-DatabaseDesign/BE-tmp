@@ -26,7 +26,7 @@ public class Collection {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "collection_name",length = 20)
+    @Column(name = "collection_name",length = 255)
     private String collectionName;
 
     @Column(name = "content",length = 255)

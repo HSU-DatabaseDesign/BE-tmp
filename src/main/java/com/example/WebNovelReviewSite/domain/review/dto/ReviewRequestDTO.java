@@ -42,5 +42,7 @@ public class ReviewRequestDTO {
         @DecimalMin(value = "0.0", message = "별점은 0.0 이상이어야 합니다")
         @DecimalMax(value = "5.0", message = "별점은 5.0 이하여야 합니다")
         private BigDecimal star;
+
+        private List<String> hashtags;
     }
 }

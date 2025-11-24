@@ -62,6 +62,8 @@ public class ReviewService {
             review.setContent(request.getContent());
         if (request.getStar() != null)
             review.setStar(request.getStar());
+        if (request.getHashtags() != null)
+            review.setHashtags(request.getHashtags());
     }
 
     @Transactional
