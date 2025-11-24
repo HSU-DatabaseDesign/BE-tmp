@@ -1,0 +1,1 @@
+- application.yml에 DB HOST, DB PASSWORD만 로컬 MYSQL에 맞춰서 넣어주세요.
