@@ -22,7 +22,7 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 작성", description = "웹소설에 대한 리뷰를 작성합니다. 작품당 1인 1개 리뷰 제한.")
     @PostMapping
-    public ResponseEntity<Long> createReview(@Valid @RequestBody ReviewRequestDTO.CreateDto request) {
+    public ResponseEntity<Long> createReview(@Valid @RequestBody ReviewRequestDTO.ReviewCreateDto request) {
         Long reviewId = reviewService.createReview(request);
         return ResponseEntity.ok(reviewId);
     }
@@ -30,7 +30,7 @@ public class ReviewController {
     @Operation(summary = "리뷰 수정", description = "본인이 작성한 리뷰를 수정합니다.")
     @PutMapping("/{reviewId}")
     public ResponseEntity<Void> updateReview(@PathVariable Long reviewId,
-            @Valid @RequestBody ReviewRequestDTO.UpdateDto request) {
+            @Valid @RequestBody ReviewRequestDTO.ReviewUpdateDto request) {
         reviewService.updateReview(reviewId, request);
         return ResponseEntity.ok().build();
     }

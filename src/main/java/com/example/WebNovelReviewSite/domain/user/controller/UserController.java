@@ -20,14 +20,14 @@ public class UserController {
 
     @Operation(summary = "회원 가입", description = "새로운 회원을 등록합니다. 아이디와 이메일 중복 검사를 수행합니다.")
     @PostMapping("/signup")
-    public ResponseEntity<Long> signup(@Valid @RequestBody UserRequestDTO.SignupDto request) {
+    public ResponseEntity<Long> signup(@Valid @RequestBody UserRequestDTO.UserSignupDto request) {
         Long userId = userService.signup(request);
         return ResponseEntity.ok(userId);
     }
 
     @Operation(summary = "로그인", description = "아이디와 비밀번호로 로그인하여 사용자 ID를 반환합니다.")
     @PostMapping("/login")
-    public ResponseEntity<Long> login(@Valid @RequestBody UserRequestDTO.LoginDto request) {
+    public ResponseEntity<Long> login(@Valid @RequestBody UserRequestDTO.UserLoginDto request) {
         Long userId = userService.login(request);
         return ResponseEntity.ok(userId);
     }
@@ -35,7 +35,7 @@ public class UserController {
     @Operation(summary = "회원 정보 수정", description = "회원의 이름, 이메일, 비밀번호, 닉네임을 수정합니다.")
     @PutMapping("/{userId}")
     public ResponseEntity<Void> updateUser(@PathVariable Long userId,
-            @Valid @RequestBody UserRequestDTO.UpdateDto request) {
+            @Valid @RequestBody UserRequestDTO.UserUpdateDto request) {
         userService.updateUser(userId, request);
         return ResponseEntity.ok().build();
     }

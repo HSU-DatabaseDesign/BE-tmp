@@ -19,7 +19,7 @@ public class AuthorService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long createAuthor(AuthorRequestDTO.CreateDto request) {
+    public Long createAuthor(AuthorRequestDTO.AuthorCreateDto request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
@@ -39,7 +39,7 @@ public class AuthorService {
     }
 
     @Transactional
-    public void updateAuthor(Long userId, AuthorRequestDTO.UpdateDto request) {
+    public void updateAuthor(Long userId, AuthorRequestDTO.AuthorUpdateDto request) {
         AuthorInfo authorInfo = authorRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 작가 정보입니다."));
 

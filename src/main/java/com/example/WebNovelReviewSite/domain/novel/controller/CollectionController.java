@@ -22,7 +22,7 @@ public class CollectionController {
 
     @Operation(summary = "컬렉션 생성", description = "새로운 컬렉션을 생성합니다.")
     @PostMapping
-    public ResponseEntity<Long> createCollection(@Valid @RequestBody CollectionRequestDTO.CreateDto request) {
+    public ResponseEntity<Long> createCollection(@Valid @RequestBody CollectionRequestDTO.CollectionCreateDto request) {
         Long collectionId = collectionService.createCollection(request);
         return ResponseEntity.ok(collectionId);
     }
@@ -30,7 +30,7 @@ public class CollectionController {
     @Operation(summary = "컬렉션 수정", description = "컬렉션의 이름과 설명을 수정합니다.")
     @PutMapping("/{collectionId}")
     public ResponseEntity<Void> updateCollection(@PathVariable Long collectionId,
-            @Valid @RequestBody CollectionRequestDTO.UpdateDto request) {
+            @Valid @RequestBody CollectionRequestDTO.CollectionUpdateDto request) {
         collectionService.updateCollection(collectionId, request);
         return ResponseEntity.ok().build();
     }

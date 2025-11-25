@@ -13,7 +13,7 @@ public class ReviewRequestDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateDto {
+    public static class ReviewCreateDto {
         @NotNull(message = "사용자 ID는 필수입니다")
         private Long userId;
 
@@ -35,12 +35,14 @@ public class ReviewRequestDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateDto {
+    public static class ReviewUpdateDto {
         @Size(max = 255, message = "리뷰 내용은 255자 이하여야 합니다")
         private String content;
 
         @DecimalMin(value = "0.0", message = "별점은 0.0 이상이어야 합니다")
         @DecimalMax(value = "5.0", message = "별점은 5.0 이하여야 합니다")
         private BigDecimal star;
+
+        private List<String> hashtags;
     }
 }
