@@ -21,3 +21,4 @@ public class UserBadgeId implements Serializable {
     private Long badgeId;
 }
 
+

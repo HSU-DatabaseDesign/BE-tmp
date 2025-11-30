@@ -95,7 +95,7 @@ public class BadgeEventAspect {
             if (args.length >= 2 && args[0] instanceof Long) {
                 Long followerId = (Long) args[0];
                 eventPublisher.publishEvent(new FollowAddedEvent(this, followerId));
-                log.debug("팔로우 추가 이벤트 발행: userId={}", followerId);
+                log.info("팔로우 추가 이벤트 발행: followerId={}", followerId);
             }
         } catch (Exception e) {
             log.error("팔로우 추가 이벤트 발행 중 오류 발생", e);

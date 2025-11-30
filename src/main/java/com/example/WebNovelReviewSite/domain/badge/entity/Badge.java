@@ -48,3 +48,4 @@ public class Badge {
     private List<UserBadge> userBadges = new ArrayList<>();
 }
 
+

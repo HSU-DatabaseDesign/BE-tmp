@@ -8,3 +8,4 @@ public enum BadgeType {
     LOGIN_DAYS         // 로그인 일수
 }
 
+

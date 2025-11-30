@@ -49,14 +49,20 @@ public class BadgeService {
             throw new IllegalArgumentException("LOGIN_DAYS가 아닌 경우 conditionValue 또는 (startDate와 endDate) 중 하나는 필수입니다.");
         }
 
+        // 개수 관련 뱃지(REVIEW_COUNT, COLLECTION_COUNT, FOLLOW_COUNT, LIKE_COUNT)는 기간이 없어도 됨
+        // startDate와 endDate가 모두 null이면 null로 설정, 하나라도 있으면 설정
+        LocalDateTime startDate = request.getStartDate();
+        LocalDateTime endDate = request.getEndDate();
+        
+        // 개수 관련 뱃지는 기간이 없어도 되므로 자동으로 현재 시간을 설정하지 않음
         Badge badge = Badge.builder()
                 .badgeName(request.getBadgeName())
                 .badgeImage(request.getBadgeImage())
                 .badgeType(request.getBadgeType())
                 .badgeMission(request.getBadgeMission())
                 .conditionValue(request.getConditionValue())
-                .startDate(request.getStartDate() != null ? request.getStartDate() : LocalDateTime.now())
-                .endDate(request.getEndDate())
+                .startDate(startDate)
+                .endDate(endDate)
                 .userBadges(List.of())
                 .build();
 
@@ -260,9 +266,14 @@ public class BadgeService {
 
             // 조건을 만족하는 뱃지 자동 부여
             for (Badge badge : activeReviewBadges) {
+                if (badge.getConditionValue() == null) {
+                    log.warn("뱃지 conditionValue가 null: badgeId={}", badge.getBadgeId());
+                    continue; // conditionValue가 없으면 스킵
+                }
                 if (reviewCount >= badge.getConditionValue()) {
                     assignBadgeToUserInternal(userId, badge.getBadgeId());
-                    log.info("뱃지 자동 부여: userId={}, badgeId={}, badgeName={}", userId, badge.getBadgeId(), badge.getBadgeName());
+                    log.info("뱃지 자동 부여: userId={}, badgeId={}, badgeName={}, reviewCount={}, conditionValue={}", 
+                            userId, badge.getBadgeId(), badge.getBadgeName(), reviewCount, badge.getConditionValue());
                 }
             }
         } catch (Exception e) {
@@ -286,9 +297,14 @@ public class BadgeService {
 
             // 조건을 만족하는 뱃지 자동 부여
             for (Badge badge : activeCollectionBadges) {
+                if (badge.getConditionValue() == null) {
+                    log.warn("뱃지 conditionValue가 null: badgeId={}", badge.getBadgeId());
+                    continue; // conditionValue가 없으면 스킵
+                }
                 if (collectionCount >= badge.getConditionValue()) {
                     assignBadgeToUserInternal(userId, badge.getBadgeId());
-                    log.info("뱃지 자동 부여: userId={}, badgeId={}, badgeName={}", userId, badge.getBadgeId(), badge.getBadgeName());
+                    log.info("뱃지 자동 부여: userId={}, badgeId={}, badgeName={}, collectionCount={}, conditionValue={}", 
+                            userId, badge.getBadgeId(), badge.getBadgeName(), collectionCount, badge.getConditionValue());
                 }
             }
         } catch (Exception e) {
@@ -306,15 +322,31 @@ public class BadgeService {
             // 사용자의 팔로우 개수 조회 (follower 기준)
             long followCount = followRepository.findByFollower_UserId(userId).size();
 
+            log.info("팔로우 개수 체크: userId={}, followCount={}", userId, followCount);
+
             // 활성화된 FOLLOW_COUNT 타입 뱃지 조회
             LocalDateTime now = LocalDateTime.now();
             List<Badge> activeFollowBadges = badgeRepository.findActiveBadgesByType(BadgeType.FOLLOW_COUNT, now);
 
+            log.info("활성화된 FOLLOW_COUNT 뱃지 개수: {}", activeFollowBadges.size());
+
             // 조건을 만족하는 뱃지 자동 부여
             for (Badge badge : activeFollowBadges) {
+                if (badge.getConditionValue() == null) {
+                    log.warn("뱃지 conditionValue가 null: badgeId={}", badge.getBadgeId());
+                    continue; // conditionValue가 없으면 스킵
+                }
+                
+                log.info("뱃지 체크: badgeId={}, badgeName={}, conditionValue={}, followCount={}", 
+                        badge.getBadgeId(), badge.getBadgeName(), badge.getConditionValue(), followCount);
+                
                 if (followCount >= badge.getConditionValue()) {
                     assignBadgeToUserInternal(userId, badge.getBadgeId());
-                    log.info("뱃지 자동 부여: userId={}, badgeId={}, badgeName={}", userId, badge.getBadgeId(), badge.getBadgeName());
+                    log.info("뱃지 자동 부여 성공: userId={}, badgeId={}, badgeName={}, followCount={}, conditionValue={}", 
+                            userId, badge.getBadgeId(), badge.getBadgeName(), followCount, badge.getConditionValue());
+                } else {
+                    log.info("뱃지 조건 미달: userId={}, badgeId={}, followCount={}, conditionValue={}", 
+                            userId, badge.getBadgeId(), followCount, badge.getConditionValue());
                 }
             }
         } catch (Exception e) {
@@ -329,26 +361,37 @@ public class BadgeService {
     @Transactional
     public void checkAndAssignLikeCountBadge(Long reviewAuthorId) {
         try {
-            // 리뷰 작성자가 받은 총 좋아요 개수 조회
-            long totalLikeCount = reviewRepository.findAll().stream()
-                    .filter(review -> review.getUser().getUserId().equals(reviewAuthorId))
-                    .mapToLong(review -> review.getUserList().size())
-                    .sum();
+            // 리뷰 작성자가 받은 총 좋아요 개수를 직접 쿼리로 계산
+            Long totalLikeCount = reviewRepository.countTotalLikesByUserId(reviewAuthorId);
+            if (totalLikeCount == null) {
+                totalLikeCount = 0L;
+            }
+
+            log.info("좋아요 개수 체크: userId={}, totalLikeCount={}", reviewAuthorId, totalLikeCount);
 
             // 활성화된 LIKE_COUNT 타입 뱃지 조회
             LocalDateTime now = LocalDateTime.now();
             List<Badge> activeLikeBadges = badgeRepository.findActiveBadgesByType(BadgeType.LIKE_COUNT, now);
 
+            log.info("활성화된 LIKE_COUNT 뱃지 개수: {}", activeLikeBadges.size());
+
             // 조건을 만족하는 뱃지 자동 부여
             for (Badge badge : activeLikeBadges) {
                 if (badge.getConditionValue() == null) {
+                    log.warn("뱃지 conditionValue가 null: badgeId={}", badge.getBadgeId());
                     continue; // conditionValue가 없으면 스킵
                 }
                 
+                log.info("뱃지 체크: badgeId={}, badgeName={}, conditionValue={}, totalLikeCount={}", 
+                        badge.getBadgeId(), badge.getBadgeName(), badge.getConditionValue(), totalLikeCount);
+                
                 if (totalLikeCount >= badge.getConditionValue()) {
                     assignBadgeToUserInternal(reviewAuthorId, badge.getBadgeId());
-                    log.info("뱃지 자동 부여: userId={}, badgeId={}, badgeName={}, totalLikeCount={}, conditionValue={}", 
+                    log.info("뱃지 자동 부여 성공: userId={}, badgeId={}, badgeName={}, totalLikeCount={}, conditionValue={}", 
                             reviewAuthorId, badge.getBadgeId(), badge.getBadgeName(), totalLikeCount, badge.getConditionValue());
+                } else {
+                    log.info("뱃지 조건 미달: userId={}, badgeId={}, totalLikeCount={}, conditionValue={}", 
+                            reviewAuthorId, badge.getBadgeId(), totalLikeCount, badge.getConditionValue());
                 }
             }
         } catch (Exception e) {

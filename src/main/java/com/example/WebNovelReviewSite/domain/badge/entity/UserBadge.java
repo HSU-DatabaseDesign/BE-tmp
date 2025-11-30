@@ -27,3 +27,4 @@ public class UserBadge {
     private Badge badge;
 }
 
+

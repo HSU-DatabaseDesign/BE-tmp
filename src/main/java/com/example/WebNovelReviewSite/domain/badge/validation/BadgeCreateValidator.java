@@ -40,3 +40,4 @@ public class BadgeCreateValidator implements ConstraintValidator<ValidBadgeCreat
     }
 }
 
+

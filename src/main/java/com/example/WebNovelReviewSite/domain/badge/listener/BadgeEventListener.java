@@ -11,7 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @Component
@@ -37,16 +40,16 @@ public class BadgeEventListener {
     }
 
     @Async
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleFollowAdded(FollowAddedEvent event) {
         log.info("팔로우 추가 이벤트 수신: userId={}", event.getUserId());
         badgeService.checkAndAssignFollowCountBadge(event.getUserId());
     }
 
     @Async
-    @EventListener
-    @Transactional
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleReviewLiked(ReviewLikedEvent event) {
         log.info("리뷰 좋아요 이벤트 수신: reviewAuthorId={}", event.getReviewAuthorId());
         badgeService.checkAndAssignLikeCountBadge(event.getReviewAuthorId());

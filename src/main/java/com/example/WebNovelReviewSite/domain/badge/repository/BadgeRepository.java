@@ -15,10 +15,11 @@ public interface BadgeRepository extends JpaRepository<Badge, Long> {
 
     List<Badge> findByBadgeType(BadgeType badgeType);
 
-    @Query("SELECT b FROM Badge b WHERE b.startDate <= :now AND (b.endDate IS NULL OR b.endDate >= :now)")
+    @Query("SELECT b FROM Badge b WHERE (b.startDate IS NULL OR b.startDate <= :now) AND (b.endDate IS NULL OR b.endDate >= :now)")
     List<Badge> findActiveBadges(@Param("now") LocalDateTime now);
 
-    @Query("SELECT b FROM Badge b WHERE b.badgeType = :badgeType AND b.startDate <= :now AND (b.endDate IS NULL OR b.endDate >= :now)")
+    @Query("SELECT b FROM Badge b WHERE b.badgeType = :badgeType AND (b.startDate IS NULL OR b.startDate <= :now) AND (b.endDate IS NULL OR b.endDate >= :now)")
     List<Badge> findActiveBadgesByType(@Param("badgeType") BadgeType badgeType, @Param("now") LocalDateTime now);
 }
+
 
