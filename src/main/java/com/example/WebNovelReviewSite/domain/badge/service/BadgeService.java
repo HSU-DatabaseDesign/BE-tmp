@@ -143,7 +143,16 @@ public class BadgeService {
     public void deleteBadge(Long badgeId) {
         Badge badge = badgeRepository.findById(badgeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 뱃지입니다."));
+        
+        // 뱃지 삭제 전에 관련된 모든 UserBadge를 먼저 삭제
+        List<UserBadge> userBadges = userBadgeRepository.findByBadge(badge);
+        if (!userBadges.isEmpty()) {
+            log.info("뱃지 삭제 전 관련 UserBadge 삭제: badgeId={}, userBadgeCount={}", badgeId, userBadges.size());
+            userBadgeRepository.deleteAll(userBadges);
+        }
+        
         badgeRepository.delete(badge);
+        log.info("뱃지 삭제 완료: badgeId={}, badgeName={}", badgeId, badge.getBadgeName());
     }
 
     @Transactional
